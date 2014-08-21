@@ -1,0 +1,20 @@
+html{
+    font-size: 62.5%
+}
+h1, h2, h3, h4, h5, h6{
+    line-height: 1.5em;
+}
+.inner-wrapper{
+    margin-left: 3em;
+}
+footer{
+    text-align: center;
+    margin-bottom: 2em;
+}
+h1 img{
+    vertical-align: baseline;
+    padding-right: .2em;
+}
+footer a:hover{
+    color: grey;
+}

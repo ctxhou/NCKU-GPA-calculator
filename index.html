@@ -13,13 +13,15 @@
 
 </head>
 <body>
+<a href="https://github.com/JackHou07/NCKU-GPA-calculator"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
     <div class="container">
-        <h2>NCKU GPA 計算器</h2>
-        <h5>因為成大的成績系統沒有提供目前修課的GPA成績為何，所以花了一點時間做了這個bookmarklet，可以幫你計算出你目前的GPA。</h5>
-        <hr>
-        <h3>GAP計算方式</h3>
-        採用的是以下算法
-        <pre>
+        <h1><img src="http://www.math.ncku.edu.tw/~deia2013/lib/ncku.png" alt="">NCKU GPA 計算機</h1>
+        <div class="inner-wrapper">
+            <h5>因為成大的成績系統沒有提供目前修課的GPA成績為何，所以花了一點時間做了這個bookmarklet，可以幫你計算出你目前的GPA。<br>此外，因為每次要看歷年修課資料，都得點選每個按鈕，因此在Chrome瀏覽器還會顯示修課列表。</h5>
+            <hr>
+            <h2>GAP計算方式</h2>
+            採用的是以下算法
+            <pre>
 A 　80 - 100分 　4 點
 
 B 　70 - 79 分 　3 點
@@ -32,22 +34,27 @@ E 　49分以下 　   0 點
 
 GPA=（學分 × 點數）的總和 / 總學分</pre>
         計算你到目前為止修課的GPA成績
-        <hr>
-        <h3>使用方法</h3>
-        <h4>Step 1:</h4>
-        <h5>
-            <div>將下面這個按鈕拖拉到你的書籤列。</div>
-            <a href="javascript:(function(){var script=document.createElement('SCRIPT');script.src='https://e87f0fa19a8424fd15a41eeaa362c334f09ee3a6.googledrive.com/host/0B2RxwrCtb4FHR29vODJsS2k2bkE/ncku-calculator.js';document.body.appendChild(script);})()"><button class="btn btn-default">NCKU GPA計算機</button></a>
+            <hr>
+            <h2>使用方法</h2>
+            <h3>步驟 1 : 將下面這個按鈕拖拉到你的書籤列。</h3>
+            <h5>
+                <a class="drag" href="javascript:(function(){var script=document.createElement('SCRIPT');script.src='https://e87f0fa19a8424fd15a41eeaa362c334f09ee3a6.googledrive.com/host/0B2RxwrCtb4FHR29vODJsS2k2bkE/ncku-calculator.js';document.body.appendChild(script);})()"><button class="btn btn-default">NCKU GPA計算機</button></a>
 
-            <h6>顯示書籤列的方法：<a href="http://google.22ace.com/2013/08/google-chrome-bookmarks.html">Chrome</a> | <a href="https://support.mozilla.org/zh-TW/kb/bookmarks-toolbar-display-favorite-websites?esab=a&s=書籤列&r=2&as=s#w_agcjnioguauigciceinu">Firefox</a> （ 強烈不建議使用IE ）</h6>
-        </h5>
-        <h4>Step 2: 打開你的成大歷年成績資料網頁</h4>
-        <div class="row">
-            <img src="http://i.imgur.com/xVAd4ZS.png" alt="歷年成績圖示" class="col-md-8 col-xs-12">
+                <h6>顯示書籤列的方法：<a href="http://google.22ace.com/2013/08/google-chrome-bookmarks.html">Chrome</a> | <a href="https://support.mozilla.org/zh-TW/kb/bookmarks-toolbar-display-favorite-websites?esab=a&s=書籤列&r=2&as=s#w_agcjnioguauigciceinu">Firefox</a> （ 強烈不建議使用IE ）</h6>
+            </h5>
+            <h3>步驟 2 : 打開你的成大歷年成績資料網頁</h3>
+            <div class="row">
+                <img src="http://i.imgur.com/xVAd4ZS.png" alt="歷年成績圖示" class="col-md-8 col-xs-12">
+            </div>
+
+            <h3>步驟 3 : 在歷年資料網頁點選剛剛拖拉的書籤按鈕 ＆ 等待個幾秒就會顯示你的GPA！</h3>
+
+            <hr>
+            <footer class="col-md-8">
+                <a href="https://github.com/JackHou07/NCKU-GPA-calculator" class="col-md-2">Github</a>
+                <a href="mailto:vjack070707@gmail.com" class="col-md-2">問題回報</a>
+            </footer>
         </div>
-
-        <h4>Step 3: 點選剛剛拖拉的書籤按鈕 ＆ 等待個幾秒就會顯示你的GPA和歷年修課資料！</h4>
-
     </div>
 </body>
 </html>
