@@ -29,6 +29,7 @@
         $.each(semesterNames, function(key, name){
             var scoreAndCredit = []
             var html = getSemesterHtml(name)
+            //get each semester score and credit
             scoreAndCredit = analyzeSemesterGrade(html, semesterNames)
             gpaTotal = gpaTotal + scoreAndCredit[0]
             creditTotal = creditTotal + scoreAndCredit[1]
