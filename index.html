@@ -15,18 +15,22 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
     //redirect the page
-    $( document ).ready(function() {
-        if(window.location.href != "http://ncku-gpa.sitw.tw/"){
-            window.location.replace("http://ncku-gpa.sitw.tw/");
-        }
-    });
+    // $( document ).ready(function() {
+    //     if(window.location.href != "http://ncku-gpa.sitw.tw/"){
+    //         window.location.replace("http://ncku-gpa.sitw.tw/");
+    //     }
+    // });
 </script>
 
 </head>
 <body>
 <a href="https://github.com/JackHou07/NCKU-GPA-calculator"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
     <div class="container">
-        <h1><img src="http://www.math.ncku.edu.tw/~deia2013/lib/ncku.png" alt="">NCKU GPA 計算機</h1>
+        <h1>
+            <img src="http://www.math.ncku.edu.tw/~deia2013/lib/ncku.png" alt="">
+            NCKU GPA 計算機
+            <span class="fb-like" data-href="http://ncku-gpa.sitw.tw/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></span>
+        </h1>
         <div class="inner-wrapper">
             <h5>因為成大的成績系統沒有提供目前修課的GPA成績為何，所以花了一點時間做了這個bookmarklet，可以幫你計算出你目前的GPA。<br>此外，因為每次要看歷年修課資料，都得點選每個按鈕，因此在Chrome瀏覽器還會顯示修課列表。</h5>
             <hr>
@@ -82,5 +86,13 @@ GPA=（學分 × 點數）的總和 / 總學分</pre>
   ga('send', 'pageview');
 
 </script>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&appId=485763598226041&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 </body>
 </html>
