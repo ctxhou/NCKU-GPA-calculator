@@ -18,3 +18,13 @@ h1 img{
 footer a:hover{
     color: grey;
 }
+
+/*RESPONSIVE*/
+@media only screen and (max-width: 767px) {
+    h1{
+        font-size: 2em;
+    }
+    .inner-wrapper{
+        margin-left: 0;
+    }
+}
