@@ -8,4 +8,4 @@
 在Firefox顯示歷年修課列表會有編碼的問題，因此在Firefox僅顯示GPA。
 
 ##License
-MIT [@jackhou07](http://github.com/jackhou07)
+MIT [@ctxhou](http://github.com/ctxhou)
