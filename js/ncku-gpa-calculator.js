@@ -19,24 +19,28 @@
     }
 
     function initGPABookmarklet() {
-        var gpaTotal = 0,
-            creditTotal = 0;
+        if (document.domain == "qrys.sso2.ncku.edu.tw") {
+            var gpaTotal = 0,
+                creditTotal = 0;
 
-        // get all the submit button name
-        var semesterNames = getSemesterName();
-        var allClass = []
-        // loop all the submit button
-        $.each(semesterNames, function(key, name){
-            var scoreAndCredit = []
-            var html = getSemesterHtml(name)
-            //get each semester score and credit
-            scoreAndCredit = analyzeSemesterGrade(html, semesterNames)
-            gpaTotal = gpaTotal + scoreAndCredit[0]
-            creditTotal = creditTotal + scoreAndCredit[1]
-            allClass.push(scoreAndCredit[2])
-        })
-        var gpaScore = (gpaTotal / creditTotal)
-        showResult(gpaScore, allClass, semesterNames)
+            // get all the submit button name
+            var semesterNames = getSemesterName();
+            var allClass = []
+            // loop all the submit button
+            $.each(semesterNames, function(key, name){
+                var scoreAndCredit = []
+                var html = getSemesterHtml(name)
+                //get each semester score and credit
+                scoreAndCredit = analyzeSemesterGrade(html, semesterNames)
+                gpaTotal = gpaTotal + scoreAndCredit[0]
+                creditTotal = creditTotal + scoreAndCredit[1]
+                allClass.push(scoreAndCredit[2])
+            })
+            var gpaScore = (gpaTotal / creditTotal)
+            showResult(gpaScore, allClass, semesterNames)
+        } else {
+            window.location.href = "http://ncku-gpa.sitw.tw/";
+        }
     }
 
     function showResult(gpaScore, allClass, semesterNames){
