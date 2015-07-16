@@ -19,9 +19,11 @@
     }
 
     function initGPABookmarklet() {
-        if (document.domain == "qrys.sso2.ncku.edu.tw") {
+        if (document.domain == "qrys.sso2.ncku.edu.tw" || "140.116.165.71:8888" || "140.116.165.72:8888" || "140.116.165.73:8888") {
             var gpaTotal = 0,
                 creditTotal = 0;
+                coreGenTotal = [0,0,0,0];
+                overGenTotal = [0,0,0,0];
 
             // get all the submit button name
             var semesterNames = getSemesterName();
@@ -35,18 +37,28 @@
                 gpaTotal = gpaTotal + scoreAndCredit[0]
                 creditTotal = creditTotal + scoreAndCredit[1]
                 allClass.push(scoreAndCredit[2])
+                for (var i = 0; i <4; i++) {
+                    coreGenTotal[i] += scoreAndCredit[3][i];
+                    overGenTotal[i] += scoreAndCredit[4][i];
+                };
             })
             var gpaScore = (gpaTotal / creditTotal)
-            showResult(gpaScore, allClass, semesterNames)
+            showResult(gpaScore, allClass, semesterNames, coreGenTotal, overGenTotal)
         } else {
             window.location.href = "http://ncku-gpa.sitw.tw/";
         }
     }
 
-    function showResult(gpaScore, allClass, semesterNames){
+    function showResult(gpaScore, allClass, semesterNames, coreGen, overGen){
         //if it is not firefox, print the full result
         if(!$.browser.mozilla){
             var header = "<h3>Your GPA: "+ gpaScore + "</h3>"
+            var thead0 = "<tr><td><b>®Ö¤ß³qÃÑ</b></td><td><b>¾Ç¤À</b></td><td style='border-left: 1px solid black'><b>¸ó»â°ì³qÃÑ</b></td><td><b>¾Ç¤À</b></td></tr>"
+            var tbody0 = "<tr><td>°òÂ¦°ê¤å</td><td>"+ coreGen[0] +"</td><td style='border-left: 1px solid black'>¤H¤å¾Ç</td><td>"+ overGen[0] +"</td></tr>" +
+                         "<tr><td>­^¤å</td><td>"+ coreGen[1] +"</td><td style='border-left: 1px solid black'>ªÀ·|¬ì¾Ç</td><td>"+ overGen[1] +"</td></tr>" +
+                         "<tr><td>¤½¥Á»P¾ú¥v</td><td>"+ coreGen[2] +"</td><td style='border-left: 1px solid black'>¦ÛµM»P¤uµ{¬ì¾Ç</td><td>"+ overGen[2] +"</td></tr>" +
+                         "<tr><td>­õ¾Ç»PÃÀ³N</td><td>"+ coreGen[3] +"</td><td style='border-left: 1px solid black'>¥Í©R¬ì¾Ç»P°·±d</td><td>"+ overGen[3] +"</td></tr>"
+
             var thead = "<tr><td>Class name</td><td>credit</td><td>score</td></tr>"
             var tbody = ""
             for (var key in allClass){
@@ -54,12 +66,17 @@
                 for(var detail in allClass[key]){
                     tbody = tbody + "<tr><td>" + allClass[key][detail].className
                                   + "</td><td>" + allClass[key][detail].credit
-                                  + "</td><td>" + allClass[key][detail].score + "</td></tr>"
+                                  + "</td><td>" + allClass[key][detail].score
+                                  + "</td><td>" + allClass[key][detail].gen + "</td></tr>"
                 }
             }
             $('body').append("<div id='my-score' style='padding: 10px;background-color:#f7f7f7; position:absolute; left: 25%; top: 0px'><button id='close'>close</button>"
                                 + header
                                 + "<table>"
+                                + thead0
+                                + tbody0
+                                + "</table>"
+                                + "<table style='margin-top: 20px;'>"
                                 + thead
                                 + tbody
                                 + "</table> </div>")
@@ -89,6 +106,10 @@
     function analyzeSemesterGrade(html, semesterNames){
         var gpaPart = 0;
         var creditPart = 0;
+        //®Ö¤ß³qÃÑ
+        var coreGenPart = [0,0,0,0];
+        //¸ó»â°ì
+        var overGenPart = [0,0,0,0];
         var json = [];
 
         html = html.replace(/(\/body|\/html)/i, "\/div")
@@ -97,11 +118,12 @@
 
         $(html).find("table[bgcolor='#66CCFF'] tr:gt(1):not(:last)").each(function(){
             var className = $(this).find('td:eq('+ 3 + ') b').html()
-            var credit = $(this).find('td:eq('+ 5 + ') b').html() //å­¸åˆ†
-            var score = $(this).find('td:eq('+ 7 + ') b').html()  //åˆ†æ•¸
+            var credit = $(this).find('td:eq('+ 5 + ') b').html() //¾Ç¤À
+            var score = $(this).find('td:eq('+ 7 + ') b').html()  //¤À¼Æ
+            var gen = $(this).find('td:eq('+ 9 + ') b').html()    //³qÃÑ
             var origin = score
             if (className !== null){
-                json.push({"className": className, "credit": credit, "score": score})
+                json.push({"className": className, "credit": credit, "score": score, "gen": gen})
             }
             score = parseInt(score) || -1 //if the score is not appropriate, assign -1
             if (score != -1) {
@@ -109,9 +131,34 @@
                 score = gpaScore(score);
                 gpaPart = gpaPart + score * credit
                 creditPart = creditPart + credit
+                switch(gen) {
+                    case "¤H¤å¾Ç":
+                        overGenPart[0] += credit;
+                        break;
+                    case "ªÀ·|¬ì¾Ç":
+                        overGenPart[1] += credit;
+                        break;
+                    case "¦ÛµM»P¤uµ{¬ì¾Ç":
+                        overGenPart[2] += credit;
+                        break;
+                    case "¥Í©R¬ì¾Ç»P°·±d":
+                        overGenPart[3] += credit;
+                        break;
+                    case "­õ¾Ç»PÃÀ³N":
+                        coreGenPart[3] += credit;
+                        break;
+                    case "®Ö¤ß³qÃÑ":
+                        if(className.search("°òÂ¦°ê¤å") != -1)
+                            coreGenPart[0] += credit;
+                        if(className.search("­^¤å") != -1)
+                            coreGenPart[1] += credit;
+                        if(className.search("¤½¥Á»P¾ú¥v") != -1)
+                            coreGenPart[2] += credit;
+                        break;
+                }
             }
         })
-        return [gpaPart, creditPart, json]
+        return [gpaPart, creditPart, json, coreGenPart, overGenPart]
     }
 
     function gpaScore(score){
