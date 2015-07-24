@@ -21,8 +21,8 @@
     function initGPABookmarklet() {
         if (document.domain == "qrys.sso2.ncku.edu.tw" || "140.116.165.71:8888" || "140.116.165.72:8888" || "140.116.165.73:8888") {
             var gpaTotal = 0,
-                creditTotal = 0;
-                coreGenTotal = [0,0,0,0];
+                creditTotal = 0,
+                coreGenTotal = [0,0,0,0],
                 overGenTotal = [0,0,0,0];
 
             // get all the submit button name
