@@ -13,6 +13,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 // after user click the icon, show gpa result
 chrome.pageAction.onClicked.addListener(function(tab) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-        chrome.tabs.sendMessage(tabs[0].id, {action: "show_gap"}, function(response) {});  
+        chrome.tabs.sendMessage(tabs[0].id, {action: "show_gpa"}, function(response) {});  
     });
 });

@@ -1,6 +1,6 @@
 'use strict';
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
-    if (msg.action == 'show_gap') {
+    if (msg.action == 'show_gpa') {
         initGPABookmarklet();
     }
 });
