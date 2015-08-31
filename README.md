@@ -5,7 +5,7 @@
 
 目前提供chrome extension和bookmarklet兩種版本 
 
-使用方式請參考 [usage page](http://ncku-gpa.sitw.tw/)
+使用方式請參考 [usage page](http://ncku-gpa.ctxhou.com/)
 
 ##Issue
 在Firefox顯示歷年修課列表會有編碼的問題，因此在Firefox僅顯示GPA。
