@@ -34,7 +34,7 @@
                 var html = getSemesterHtml(name)
                 //get each semester score and credit
                 scoreAndCredit = analyzeSemesterGrade(html, semesterNames)
-                gpaTotal += scoreAndCredit[0] 
+                gpaTotal = accAdd(gpaTotal, scoreAndCredit[0])
                 creditTotal += scoreAndCredit[1]
                 allClass.push(scoreAndCredit[2])
                 for (var i = 0; i < 4; i++) {
@@ -52,14 +52,15 @@
     function showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGen, overGen){
         //if it is not firefox, print the full result
         if(!$.browser.mozilla){
-            var header = "<h3>Your GPA: "+ gpaScoreNum + "</h3>"
+            var header = "<h3>Your Avg. GPA: "+ gpaScoreNum + "</h3>"
+
             var thead0 = "<tr><td><b>核心通識</b></td><td><b>學分</b></td><td style='border-left: 1px solid black'><b>跨領域通識</b></td><td><b>學分</b></td></tr>"
             var tbody0 = "<tr><td>基礎國文</td><td>"+ coreGen[0] +"</td><td style='border-left: 1px solid black'>人文學</td><td>"+ overGen[0] +"</td></tr>" +
                          "<tr><td>英文</td><td>"+ coreGen[1] +"</td><td style='border-left: 1px solid black'>社會科學</td><td>"+ overGen[1] +"</td></tr>" +
                          "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td style='border-left: 1px solid black'>自然與工程科學</td><td>"+ overGen[2] +"</td></tr>" +
                          "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td style='border-left: 1px solid black'>生命科學與健康</td><td>"+ overGen[3] +"</td></tr>"
 
-            var thead = "<tr><td>課程名稱</td><td>學分</td><td>分數</td><td>GPA分數</td><td>等第制成績</td></tr>"
+            var thead = "<tr><td>課程名稱</td><td>學分</td><td>分數</td><td>GPA</td><td>等第制</td><td>GPA * 學分</td></tr>"
             var tbody = ""
             for (var key in allClass){
                 tbody = tbody + "<tr style='border-bottom: 1px solid white'><td style='padding-top: 20px; '>" + semesterNames[key] + "</td></tr>"
@@ -69,11 +70,14 @@
                                   + "</td><td>" + allClass[key][detail].score
                                   + "</td><td>" + allClass[key][detail].gpaScoreNum
                                   + "</td><td>" + allClass[key][detail].gpaScoreLetter
+                                  + "</td><td>" + (allClass[key][detail].gpaScoreNum * 1000 * allClass[key][detail].credit) / 1000
                                   + "</td><td>" + allClass[key][detail].gen + "</td></tr>"
                 }
             }
             $('body').append("<div id='my-score' style='padding: 10px;background-color:#f7f7f7; position:absolute; left: 25%; top: 0px'><button id='close'>close</button>"
                                 + header
+                                + "<h5>Your Total GPA: " + gpaTotal + "</h5>"
+                                + "<h5>Your Total credit: " + creditTotal + "</h5s>"
                                 + "<table>"
                                 + thead0
                                 + tbody0
@@ -93,7 +97,7 @@
     function getSemesterHtml(name) {
         var html = null
         $.ajax({
-            url: "?submit1="+name,
+            url: "?submit1=" + name,
             contentType: "application/x-www-form-urlencoded;charset=UTF-8",
             async : false, /**/
             processData : false,
@@ -128,14 +132,15 @@
             var gen = $(this).find('td:eq('+ 9 + ') b').html()    //通識
             var origin = score
             
-            score = parseInt(score) || -1 //if the score is not appropriate, assign -1
-            if (score != -1) {
+            score = parseInt(score) || $(this).find('td:eq('+ 7 + ') b').html() //if the score is not appropriate, assign -1
+            if (score != -1 && score != null) {
                 credit = parseInt(credit)
                 //換算成4.3制
                 gpaScoreNum = gpaScore(score);
                 //A～X
                 gpaScoreLetter = gpaLetter(gpaScoreNum)
-                gpaScoreNumTotal += gpaScoreNum * credit
+                gpaScoreNumTotal = accAdd(gpaScoreNumTotal, gpaScoreNum * 1000 * credit / 1000)
+                console.log(gpaScoreNumTotal)
                 creditPart += credit
                 switch(gen) {
                     case "人文學":
@@ -233,7 +238,7 @@
             gpa = 1.7;
         }else if (score >= 50 && score <= 59){
             gpa = 1;
-        }else if (score >= 0){
+        }else if (score <= 0 || score == -1){
             gpa = 0;
         }
         return gpa
@@ -246,6 +251,14 @@
             semesterNames.push(name)
         })
         return semesterNames
+    }
+
+    function accAdd(arg1,arg2){
+        var r1,r2,m;
+        try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
+        try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
+        m=Math.pow(10,Math.max(r1,r2))
+        return (arg1*m+arg2*m)/m
     }
 })();
 
