@@ -99,10 +99,10 @@
             type: "POST",
             success: function(web){
                 html = web
-                return html
+                
             }
         })
-        
+        return html
     }
 
     function analyzeSemesterGrade(html, semesterNames){
