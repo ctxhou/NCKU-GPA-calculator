@@ -34,8 +34,8 @@
                 var html = getSemesterHtml(name)
                 //get each semester score and credit
                 scoreAndCredit = analyzeSemesterGrade(html, semesterNames)
-                gpaTotal = gpaTotal + scoreAndCredit[0] 
-                creditTotal = creditTotal + scoreAndCredit[1]
+                gpaTotal += scoreAndCredit[0] 
+                creditTotal += scoreAndCredit[1]
                 allClass.push(scoreAndCredit[2])
                 for (var i = 0; i < 4; i++) {
                     coreGenTotal[i] += scoreAndCredit[3][i];
@@ -43,7 +43,7 @@
                 };
             })
             var gpaScoreNum = (gpaTotal / creditTotal)
-            showResult(gpaScoreNum, gpaTotal, allClass, semesterNames, coreGenTotal, overGenTotal)
+            showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGenTotal, overGenTotal)
         } else {
             window.location.href = "http://ncku-gpa.sitw.tw/";
         }
@@ -59,7 +59,7 @@
                          "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td style='border-left: 1px solid black'>自然與工程科學</td><td>"+ overGen[2] +"</td></tr>" +
                          "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td style='border-left: 1px solid black'>生命科學與健康</td><td>"+ overGen[3] +"</td></tr>"
 
-            var thead = "<tr><td>課程名稱</td><td>學分</td><td>分數</td><td>等第制成績</td></tr>"
+            var thead = "<tr><td>課程名稱</td><td>學分</td><td>分數</td><td>GPA分數</td><td>等第制成績</td></tr>"
             var tbody = ""
             for (var key in allClass){
                 tbody = tbody + "<tr style='border-bottom: 1px solid white'><td style='padding-top: 20px; '>" + semesterNames[key] + "</td></tr>"
@@ -67,6 +67,7 @@
                     tbody = tbody + "<tr><td>" + allClass[key][detail].className
                                   + "</td><td>" + allClass[key][detail].credit
                                   + "</td><td>" + allClass[key][detail].score
+                                  + "</td><td>" + allClass[key][detail].gpaScoreNum
                                   + "</td><td>" + allClass[key][detail].gpaScoreLetter
                                   + "</td><td>" + allClass[key][detail].gen + "</td></tr>"
                 }
@@ -106,6 +107,7 @@
     }
 
     function analyzeSemesterGrade(html, semesterNames){
+        var gpaScoreNumTotal = 0;
         var gpaScoreNum = 0;
         var gpaScoreLetter = "X";
         var creditPart = 0;
@@ -130,11 +132,11 @@
             if (score != -1) {
                 credit = parseInt(credit)
                 //換算成4.3制
-                score = gpaScore(score);
+                gpaScoreNum = gpaScore(score);
                 //A～X
-                gpaScoreLetter = gpaLetter(score)
-                gpaScoreNum = gpaScoreNum + score * credit
-                creditPart = creditPart + credit
+                gpaScoreLetter = gpaLetter(gpaScoreNum)
+                gpaScoreNumTotal += gpaScoreNum * credit
+                creditPart += credit
                 switch(gen) {
                     case "人文學":
                         overGenPart[0] += credit;
@@ -165,10 +167,10 @@
                 json.push({"className": className, "credit": credit, "score": score, "gpaScoreNum": gpaScoreNum, "gen": gen, "gpaScoreLetter": gpaScoreLetter})
             }
         })
-        return [gpaScoreNum, creditPart, json, coreGenPart, overGenPart]
+        return [gpaScoreNumTotal, creditPart, json, coreGenPart, overGenPart]
     }
 
-    function gpaScore(score){
+    function gpaLetter(score){
         var letter = "X";
         switch(score) {
             case 4.3:
@@ -205,10 +207,11 @@
                 letter = "E";
                 break;
         }
+
         return letter;
     }
 
-    function gpaLetter(score){
+    function gpaScore(score){
         var gpa = 0;
         if(score >= 90){
             gpa = 4.3;
@@ -230,7 +233,7 @@
             gpa = 1.7;
         }else if (score >= 50 && score <= 59){
             gpa = 1;
-        }else {
+        }else if (score >= 0){
             gpa = 0;
         }
         return gpa
