@@ -55,10 +55,11 @@
             var header = "<h3>Your Avg. GPA: "+ gpaScoreNum + "</h3>"
 
             var thead0 = "<tr><td><b>核心通識</b></td><td><b>學分</b></td><td style='border-left: 1px solid black'><b>跨領域通識</b></td><td><b>學分</b></td></tr>"
-            var tbody0 = "<tr><td>基礎國文</td><td>"+ coreGen[0] +"</td><td style='border-left: 1px solid black'>人文學</td><td>"+ overGen[0] +"</td></tr>" +
-                         "<tr><td>英文</td><td>"+ coreGen[1] +"</td><td style='border-left: 1px solid black'>社會科學</td><td>"+ overGen[1] +"</td></tr>" +
-                         "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td style='border-left: 1px solid black'>自然與工程科學</td><td>"+ overGen[2] +"</td></tr>" +
-                         "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td style='border-left: 1px solid black'>生命科學與健康</td><td>"+ overGen[3] +"</td></tr>"
+            var tbody0 = "<tr><td>基礎國文</td><td>" + coreGen[0] + "</td><td style='border-left: 1px solid black'>人文學</td><td>" + overGen[0] +"</td></tr>" +
+                         "<tr><td>英文</td><td>" + coreGen[1] + "</td><td style='border-left: 1px solid black'>社會科學</td><td>" + overGen[1] +"</td></tr>" +
+                         "<tr><td>公民與歷史</td><td>" + coreGen[2] + "</td><td style='border-left: 1px solid black'>自然與工程科學</td><td>" + overGen[2] + "</td></tr>" +
+                         "<tr><td>哲學與藝術</td><td>" + coreGen[3] + "</td><td style='border-left: 1px solid black'>生命科學與健康</td><td>" + overGen[3] + "</td></tr>" +
+                         "<tr><td></td><td></td><td style='border-left: 1px solid black'>科際整合</td><td>" + overGen[4] + "</td></tr>"
 
             var thead = "<tr><td>課程名稱</td><td>學分</td><td>分數</td><td>GPA</td><td>等第制</td><td>GPA * 學分</td></tr>"
             var tbody = ""
@@ -118,7 +119,7 @@
         //核心通識
         var coreGenPart = [0, 0, 0, 0];
         //跨領域
-        var overGenPart = [0, 0, 0, 0];
+        var overGenPart = [0, 0, 0, 0, 0];
         var json = [];
 
         html = html.replace(/(\/body|\/html)/i, "\/div")
@@ -140,7 +141,7 @@
                 //A～X
                 gpaScoreLetter = gpaLetter(gpaScoreNum)
                 gpaScoreNumTotal = accAdd(gpaScoreNumTotal, gpaScoreNum * 1000 * credit / 1000)
-                console.log(gpaScoreNumTotal)
+
                 creditPart += credit
                 switch(gen) {
                     case "人文學":
@@ -154,6 +155,9 @@
                         break;
                     case "生命科學與健康":
                         overGenPart[3] += credit;
+                        break;
+                    case "科際整合":
+                        overGenPart[4] += credit;
                         break;
                     case "哲學與藝術":
                         coreGenPart[3] += credit;
