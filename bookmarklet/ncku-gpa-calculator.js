@@ -133,7 +133,7 @@
             var origin = score
             
             score = parseInt(score) || $(this).find('td:eq('+ 7 + ') b').html() //if the score is not appropriate, assign -1
-            if (score != -1 && score != null) {
+            if (typeof score === 'number' && score != null) {
                 credit = parseInt(credit)
                 //換算成4.3制
                 gpaScoreNum = gpaScore(score);
