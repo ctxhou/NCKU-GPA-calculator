@@ -15,53 +15,72 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
     //redirect the page
-    $( document ).ready(function() {
-        if(window.location.href != "http://ncku-gpa.ctxhou.com/"){
-            window.location.replace("http://ncku-gpa.ctxhou.com/");
-        }
-    });
+    // $( document ).ready(function() {
+    //     if(window.location.href != "http://ncku-gpa.ctxhou.com/"){
+    //         window.location.replace("http://ncku-gpa.ctxhou.com/");
+    //     }
+    // });
 </script>
 
 </head>
 <body>
-<a href="https://github.com/JackHou07/NCKU-GPA-calculator" class="hidden-xs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+<a href="https://github.com/ctxhou/NCKU-GPA-calculator" class="hidden-xs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
     <div class="container">
         <h1>
             <img src="http://www.math.ncku.edu.tw/~deia2013/lib/ncku.png" alt="">NCKU GPA 計算機
         </h1>
-        <div class="fb-like" data-href="https://www.facebook.com/sitwgroup" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
         <div class="alert alert-danger">
-            注意，GPA計算機有更新，麻煩重新拉書籤按鈕！
+            注意，GPA計算機有更新，要先確認自己的畢業年度所採用的計算方式哦！
         </div>
 
-        <div class="inner-wrapper">
+        <div class="container">
             <h5>因為成大的成績系統沒有提供目前修課的GPA成績為何，所以花了一點時間做了這個bookmarklet，可以幫你計算出你目前的GPA。<br>此外，因為每次要看歷年修課資料，都得點選每個按鈕，因此在Chrome瀏覽器還會顯示修課列表。</h5>
             <hr>
             <h2>GPA計算方式</h2>
-            採用的是以下算法
-            <pre>
-              A+ 　90 - 100分 　4.3 點
-              A 　 85 - 89分 　 4   點
-              A- 　80 - 84分 　 3.7 點
-              B+ 　77 - 79分 　 3.3 點
-              B 　 73 - 76分 　 3   點
-              B- 　70 - 72分 　 2.7 點
-              C+ 　67 - 69分 　 2.3 點
-              C 　 63 - 66分 　 2   點
-              C- 　60 - 62分 　 1.7 點
-              D 　 50 - 59分 　 1.0 點
-              E 　 0 - 50分 　  0   點
+            <p>學校在104年後有改計算GPA的機制，所以新舊制的計算方式都有提供！ <a href="http://acad.ncku.edu.tw/ezfiles/12/1012/img/2259/188390409.pdf">參考資料</a></p>
+            <div class="row">
+              <div class="col-md-6">
+                <h3>104年度之前(舊制)</h3>
+                採用的是以下算法
+               <pre style="line-height: 2">
+A 　80 - 100分 　4 點
+B 　70 - 79 分 　3 點
+C 　60 - 69 分 　2 點
+D 　50 - 59 分 　1 點
+E 　49分以下 　   0 點
+GPA=（學分 × 點數）的總和 / 總學分</pre>
+              </div>
+              <div class="col-md-6">
+                <h3>104年度之後(新制)</h3>
+                採用的是以下算法
+                <pre style='line-height: 2'>
+A+ 　90 - 100分 　4.3 點
+A 　 85 - 89分 　 4   點
+A- 　80 - 84分 　 3.7 點
+B+ 　77 - 79分 　 3.3 點
+B 　 73 - 76分 　 3   點
+B- 　70 - 72分 　 2.7 點
+C+ 　67 - 69分 　 2.3 點
+C 　 63 - 66分 　 2   點
+C- 　60 - 62分 　 1.7 點
+D 　 50 - 59分 　 1.0 點
+E 　 0 - 50分 　  0   點
 
-              GPA=（學分 × 點數）的總和 / 總學分</pre>
-            計算你到目前為止修課的GPA成績
-            <hr>
-            <h2>使用方法</h2>
-            <h3>步驟 1 : 將下面這個按鈕拖拉到你的書籤列。</h3>
-            <h5>
-                <a class="btn btn-default" href="javascript:(function(){var script=document.createElement('SCRIPT');script.src='https://rawgit.com/xxhomey19/NCKU-GPA-calculator/gh-pages/bookmarklet/ncku-gpa-calculator.js';document.body.appendChild(script);})()">NCKU GPA計算機</a>
+GPA =（學分 × 點數）的總和 / 總學分</pre>
+              </div>
+            </div>
+            <h2>GPA計算機使用方法</h2>
+            <div class="row">
+              <h3>步驟 1 : 選擇你的計算機制，並將下面選擇的按鈕拖拉到你的書籤列。</h3>
+              <div class="col-md-12">
+                <h5>
+                  <a class="btn btn-default" href="javascript:(function(){var script=document.createElement('SCRIPT');script.src='https://dl.dropboxusercontent.com/u/39864418/ncku-gpa-calculator.js';document.body.appendChild(script);})()">舊制 NCKU GPA計算機</a>
+                    <a class="btn btn-default" href="javascript:(function(){var script=document.createElement('SCRIPT');script.src='https://dl.dropboxusercontent.com/u/39864418/ncku-gpa-calculator-new.js';document.body.appendChild(script);})()">新制 NCKU GPA計算機</a>
+                </h5>
+                  <h6>顯示書籤列的方法：<a href="http://google.22ace.com/2013/08/google-chrome-bookmarks.html">Chrome</a> | <a href="https://support.mozilla.org/zh-TW/kb/bookmarks-toolbar-display-favorite-websites?esab=a&s=書籤列&r=2&as=s#w_agcjnioguauigciceinu">Firefox</a> （ 強烈不建議使用IE ）</h6>
+              </div>
+            </div>
 
-                <h6>顯示書籤列的方法：<a href="http://google.22ace.com/2013/08/google-chrome-bookmarks.html">Chrome</a> | <a href="https://support.mozilla.org/zh-TW/kb/bookmarks-toolbar-display-favorite-websites?esab=a&s=書籤列&r=2&as=s#w_agcjnioguauigciceinu">Firefox</a> （ 強烈不建議使用IE ）</h6>
-            </h5>
             <h3>步驟 2 : 打開你的成大歷年成績資料網頁</h3>
             <div class="row">
                 <img src="http://i.imgur.com/xVAd4ZS.png" alt="歷年成績圖示" class="col-md-8 col-xs-12">
@@ -69,14 +88,33 @@
 
             <h3>步驟 3 : 在歷年資料網頁點選剛剛拖拉的書籤按鈕 ＆ 等待個幾秒就會顯示你的GPA！</h3>
             <hr>
-            <h4 style="color:tomato">附註：一切的運算都只在你本地端進行，請安心使用。</h4>
 
+            <h2>功能特色</h2>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="list-group">
+                  <div class="list-group-item">
+                    <h4 class="list-group-item-heading">一鍵計算</h4>
+                    <p class="list-group-item-text">省去你每個科目對照GPA分數的麻煩</p>
+                  </div>
+                  <div class="list-group-item">
+                    <h4 class="list-group-item-heading">通識課分類</h4>
+                    <p class="list-group-item-text">一次列出你目前修過哪些通識課的類別</p>
+                  </div>
+                  <div class="list-group-item">
+                    <h4 class="list-group-item-heading">所有成績</h4>
+                    <p class="list-group-item-text">一次把所有學期的成績都列出，再也不需要一個一個點按</p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <hr>
-
+            <h4 style="color:tomato">附註：一切的運算都只在你本地端進行，請安心使用。</h4>
+            <hr>
             <footer class="col-md-8">
-                <a href="https://github.com/JackHou07/NCKU-GPA-calculator" class="col-md-2 hidden-xs">Github</a>
+                <a href="https://github.com/ctxhou/NCKU-GPA-calculator" class="col-md-2 hidden-xs">Github</a>
                 <a href="mailto:ctxhou@gmail.com" class="col-md-4"  onClick=”ga('send', 'event', 'Email', 'click to email','ctxhou@gmail.com');>問題回報與建議</a>
-                <span class="pull-right">powered by <a href="https://www.facebook.com/sitwgroup">SITW</a></span>
+                <span class="pull-right">powered by <a href="http://twitter.com/ctxhou">ctxhou</a></span>
             </footer>
         </div>
     </div>
@@ -92,12 +130,5 @@
 
 </script>
 
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 </body>
 </html>
