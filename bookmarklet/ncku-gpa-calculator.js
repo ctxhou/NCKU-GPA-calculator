@@ -144,8 +144,7 @@
             var origin = score;
             
             score = parseInt(score) || $(this).find('td:eq('+ 7 + ') b').html(); //if the score is not appropriate, assign -1
-            console.log(score);
-            console.log(typeof score);
+
             if (typeof score === 'number' && score != null) {
 
                 credit = parseInt(credit);
@@ -288,7 +287,7 @@
         {
             var gpa = parseFloat($(this).html());
             var score = parseFloat($(this).siblings('#eachGpaScoreNumTotal').html());
-            console.log(score);
+
             if(score == 0) 
                 $(this).closest('tr').css('background-color', '#DDDDDD');
             else if(gpa >= 4)
@@ -304,5 +303,3 @@
         });
     }
 })();
-
-
