@@ -14,7 +14,9 @@
 
 ## Special thanks
 [@imgarylai](http://github.com/imgarylai)
+
 [@team6612](http://github.com/team6612)
+
 [@xxhomey19](http://github.com/xxhomey19)
 
 ## License
