@@ -136,7 +136,7 @@
 
         $(html).find("table[bgcolor='#66CCFF'] tr:gt(1):not(:last)").each(function(){
             gpaScoreNumTotal, gpaScoreNum = 0;
-            gpaScoreLetter = "X";
+            gpaScoreLetter = "F";
             var className = $(this).find('td:eq('+ 3 + ') b').html();
             var credit = $(this).find('td:eq('+ 5 + ') b').html(); //學分
             var score = $(this).find('td:eq('+ 7 + ') b').html();  //分數
@@ -151,7 +151,7 @@
                 credit = parseInt(credit);
                 //換算成4.3制
                 gpaScoreNum = gpaScore(score);
-                //A～X
+                //A～F
                 gpaScoreLetter = gpaLetter(gpaScoreNum);
                 gpaScoreNumTotal = accAdd(gpaScoreNumTotal, gpaScoreNum * 1000 * credit / 1000);
 
@@ -219,11 +219,8 @@
             case 1.7:
                 letter = "C-";
                 break;
-            case 1:
-                letter = "D";
-                break;
             case 0:
-                letter = "E";
+                letter = "F";
                 break;
         }
 
@@ -234,25 +231,23 @@
         var gpa = 0;
         if(score >= 90){
             gpa = 4.3;
-        }else if (score >= 85 && score <= 89){
+        } else if (score >= 85 && score <= 89){
             gpa = 4;
-        }else if (score >= 80 && score <= 84){
+        } else if (score >= 80 && score <= 84){
             gpa = 3.7;
-        }else if (score >= 77 && score <= 79){
+        } else if (score >= 77 && score <= 79){
             gpa = 3.3;
-        }else if (score >= 73 && score <= 76){
+        } else if (score >= 73 && score <= 76){
             gpa = 3;
-        }else if (score >= 70 && score <= 72){
+        } else if (score >= 70 && score <= 72){
             gpa = 2.7;
-        }else if (score >= 67 && score <= 69){
+        } else if (score >= 67 && score <= 69){
             gpa = 2.3;
-        }else if (score >= 63 && score <= 66){
+        } else if (score >= 63 && score <= 66){
             gpa = 2;
-        }else if (score >= 60 && score <= 62){
+        } else if (score >= 60 && score <= 62){
             gpa = 1.7;
-        }else if (score >= 50 && score <= 59){
-            gpa = 1;
-        }else if (score <= 0 || score == -1){
+        } else if (score == -1 || score <= 59){
             gpa = 0;
         }
         return gpa
