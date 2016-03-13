@@ -34,7 +34,7 @@
             $.each(semesterNames, function(key, name){
                 var scoreAndCredit = [];
                 //var html = getSemesterHtml(name);
-                $.when(getSemesterHtml(name)).done(function(html){
+                getSemesterHtml(name, function(html){
                 //get each semester score and credit
                     scoreAndCredit = analyzeSemesterGrade(html, semesterNames);
                     gpaTotal = accAdd(gpaTotal, scoreAndCredit[0]);
@@ -68,7 +68,7 @@
             var thead = "<tr><th>課程名稱</th><th>學分</th><th>分數</th><th>GPA</th><th>等第制</th><th>GPA * 學分</th><th>通識</th></tr>";
             var tbody = ""
             for (var key in allClass){
-                tbody = tbody + "<tr style='border-bottom: 1px solid white'><td style='padding-top: 20px; '>" + semesterNames[key] 
+                tbody = tbody + "<tr style='border-bottom: 1px solid white'><td style='padding-top: 20px; '>" + semesterNames[key]
                               + "</td><td>"
                               + "</td><td>"
                               + "</td><td>"
@@ -77,7 +77,7 @@
                               + "</td><td>"
                               + "</td></tr>";
                 for(var detail in allClass[key]){
-                    tbody = tbody + "<tr id='eachClass'><td>" + allClass[key][detail].className 
+                    tbody = tbody + "<tr id='eachClass'><td>" + allClass[key][detail].className
                                   + "</td><td>" + allClass[key][detail].credit
                                   + "</td><td>" + allClass[key][detail].score
                                   + "</td><td id='eachGpaScoreNum' >" + allClass[key][detail].gpaScoreNum
@@ -105,20 +105,19 @@
         }
     }
 
-    function getSemesterHtml(name) {
-        var html = null;
+    function getSemesterHtml(name, callback) {
+        var html = null
         $.ajax({
-            url: "?submit1=" + name,
+            url: "?submit1="+name,
             contentType: "application/x-www-form-urlencoded;charset=UTF-8",
             async : false, /**/
             processData : false,
             type: "POST",
             success: function(web){
-                html = web
-                
+              if (web.length == 718) return getSemesterHtml(name, callback);
+              else return callback(web);
             }
         })
-        return html;
     }
 
     function analyzeSemesterGrade(html, semesterNames){
@@ -144,7 +143,7 @@
             var score = $(this).find('td:eq('+ 7 + ') b').html();  //分數
             var gen = $(this).find('td:eq('+ 9 + ') b').html();    //通識
             var origin = score;
-            
+
             score = parseInt(score) || $(this).find('td:eq('+ 7 + ') b').html(); //if the score is not appropriate, assign -1
 
             if (typeof score === 'number' && score != null) {
@@ -272,7 +271,7 @@
         }
         try {
             r2 = arg2.toString().split(".")[1].length
-        } catch(e) { 
+        } catch(e) {
             r2 = 0
         }
         m = Math.pow(10, Math.max(r1, r2));
@@ -290,7 +289,7 @@
             var gpa = parseFloat($(this).html());
             var score = parseFloat($(this).siblings('#eachGpaScoreNumTotal').html());
 
-            if(score == 0) 
+            if(score == 0)
                 $(this).closest('tr').css('background-color', '#DDDDDD');
             else if(gpa >= 4)
                 $(this).closest('tr').css('background-color', '#00FF00');
