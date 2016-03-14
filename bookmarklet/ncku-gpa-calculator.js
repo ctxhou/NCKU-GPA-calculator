@@ -33,7 +33,7 @@
             $.each(semesterNames, function(key, name){
                 var scoreAndCredit = []
                 //get each semester score and credit
-                $.when(getSemesterHtml(name)).done(function(html){
+                getSemesterHtml(name, function(html){
                     scoreAndCredit = analyzeSemesterGrade(html, semesterNames)
                     gpaTotal = gpaTotal + scoreAndCredit[0]
                     creditTotal = creditTotal + scoreAndCredit[1]
@@ -90,7 +90,7 @@
         }
     }
 
-    function getSemesterHtml(name) {
+    function getSemesterHtml(name, callback) {
         var html = null
         $.ajax({
             url: "?submit1="+name,
@@ -99,10 +99,10 @@
             processData : false,
             type: "POST",
             success: function(web){
-                html = web
+              if (web.length == 718) return getSemesterHtml(name, callback);
+              else return callback(web);
             }
         })
-        return html
     }
 
     function analyzeSemesterGrade(html, semesterNames){
@@ -185,4 +185,3 @@
         return semesterNames
     }
 })();
-
