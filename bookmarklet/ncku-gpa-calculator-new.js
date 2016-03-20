@@ -48,7 +48,39 @@
             })
             var gpaScoreNum = (gpaTotal / creditTotal);
             showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGenTotal, overGenTotal);
-            resultCss();
+            appendCss("\
+              #my-score {\
+                box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\
+                padding: 20px;\
+                background: #F0F0F0;\
+                position:absolute;\
+                left: 20%;\
+                top: 5px;\
+                color: #333;\
+              }\
+              .myTable td {\
+                border-top: 1px solid rgb(155,155,155);\
+              }\
+              .myTable th,\
+              .myTable td {\
+                padding: 5px 10px;\
+              }\
+              .myTable {\
+                background-color: rgb(250,250,250);\
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);\
+                color: #333;\
+                border-collapse: collapse;\
+              }\
+              .myTable th {\
+                background-color: #13829B;\
+                color: white;\
+              }\
+              strong {\
+                font-size: 1.5em;\
+              }\
+              "
+            );
+            classifyGrade();
         } else {
             window.location.href = "http://ncku-gpa.ctxhou.com/";
         }
@@ -57,46 +89,43 @@
     function showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGen, overGen){
         //if it is not firefox, print the full result
         if(!$.support.mozilla){
-            var header = "<h3>Your Avg. GPA: "+ gpaScoreNum + "</h3>";
+            var header = "<h3>Your Avg. GPA: <strong>"+ gpaScoreNum + "</strong> </h3>";
 
-            var thead0 = "<tr><td><b>核心通識</b></td><td><b>學分</b></td><td style='border-left: 1px solid black'><b>跨領域通識</b></td><td><b>學分</b></td></tr>"
-            var tbody0 = "<tr><td>基礎國文</td><td>"+ coreGen[0] +"</td><td style='border-left: 1px solid black'>人文學</td><td>"+ overGen[0] +"</td></tr>" +
-                         "<tr><td>英文</td><td>"+ coreGen[1] +"</td><td style='border-left: 1px solid black'>社會科學</td><td>"+ overGen[1] +"</td></tr>" +
-                         "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td style='border-left: 1px solid black'>自然與工程科學</td><td>"+ overGen[2] +"</td></tr>" +
-                         "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td style='border-left: 1px solid black'>生命科學與健康</td><td>"+ overGen[3] +"</td></tr>";
+            var thead0 = "<tr><th>核心通識</th></th><th>學分</th><th>跨領域通識</th><th>學分</th></tr>"
+            var tbody0 = "<tr><td>基礎國文</td><td>"+ coreGen[0] +"</td><td>人文學</td><td>"+ overGen[0] +"</td></tr>" +
+                         "<tr><td>英文</td><td>"+ coreGen[1] +"</td><td>社會科學</td><td>"+ overGen[1] +"</td></tr>" +
+                         "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td>自然與工程科學</td><td>"+ overGen[2] +"</td></tr>" +
+                         "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td>生命科學與健康</td><td>"+ overGen[3] +"</td></tr>";
 
-            var thead = "<tr><th>課程名稱</th><th>學分</th><th>分數</th><th>GPA</th><th>等第制</th><th>GPA * 學分</th><th>通識</th></tr>";
-            var tbody = ""
+            var table = ""
+            var thead = "<tr><th>課程名稱</th><th>分數</th><th>GPA</th><th>學分</th><th>GPA*學分</th><th>等第</th><th>通識</th></tr>";
+
             for (var key in allClass){
-                tbody = tbody + "<tr style='border-bottom: 1px solid white'><td style='padding-top: 20px; '>" + semesterNames[key]
-                              + "</td><td>"
-                              + "</td><td>"
-                              + "</td><td>"
-                              + "</td><td>"
-                              + "</td><td>"
-                              + "</td><td>"
-                              + "</td></tr>";
+                var ttitle = "<h3>" + semesterNames[key] + "</h3>"
+                var tbody = ""
                 for(var detail in allClass[key]){
                     tbody = tbody + "<tr id='eachClass'><td>" + allClass[key][detail].className
-                                  + "</td><td>" + allClass[key][detail].credit
-                                  + "</td><td>" + allClass[key][detail].score
-                                  + "</td><td id='eachGpaScoreNum' >" + allClass[key][detail].gpaScoreNum
+                                  + "</td><td align='right'>" + allClass[key][detail].score
+                                  + "</td><td align='right' id='eachGpaScoreNum' >" + allClass[key][detail].gpaScoreNum
+                                  + "</td><td align='right'>" + allClass[key][detail].credit
+                                  + "</td><td align='right' id='eachGpaScoreNumTotal'>" + (allClass[key][detail].gpaScoreNum * 1000 * allClass[key][detail].credit) / 1000
                                   + "</td><td>" + allClass[key][detail].gpaScoreLetter
-                                  + "</td><td id='eachGpaScoreNumTotal'>" + (allClass[key][detail].gpaScoreNum * 1000 * allClass[key][detail].credit) / 1000
                                   + "</td><td>" + allClass[key][detail].gen + "</td></tr>";
                 }
+                table = table + ttitle
+                              + "<table class='myTable' style='margin-top: 20px;'>"
+                              + thead
+                              + tbody
+                              + "</table>"
             }
-            $('body').append("<div id='my-score' style='padding: 10px;background-color:#f7f7f7; position:absolute; left: 25%; top: 0px'><button id='close'>close</button>"
+            $('body').append("<div id='my-score'><button id='close'>close</button>"
                                 + header
-                                + "<h5>Your Total GPA: " + gpaTotal + "        Your Total credit: " + creditTotal + "</h5>"
-                                + "<table id='firstTable'>"
+                                + "<h4>Total GPA: " + gpaTotal + " / Total credit: " + creditTotal + "</h4>"
+                                + "<table class='myTable'>"
                                 + thead0
                                 + tbody0
                                 + "</table>"
-                                + "<table id='secondTable' style='margin-top: 20px;'>"
-                                + thead
-                                + tbody
-                                + "</table> </div>");
+                                + table + "</div>");
             $('#close').click(function(){
                 $('#my-score').remove();
             })
@@ -278,29 +307,36 @@
         return (arg1 * m + arg2 * m) / m;
     }
 
-    function resultCss() {
-        $('#secondTable > tbody > tr > th').css('background-color', '#0044BB');
-        $('#secondTable > tbody > tr > th').css('color', 'white');
-        $('#firstTable, #secondTable').css('border-collapse', 'collapse');
-        $('#firstTable, #secondTable, #firstTable > tbody > tr > td, #firstTable > tbody > tr > th, #secondTable > tbody > tr > td, #secondTable > tbody > tr > th').css('border', '1px solid black');
-
+    function classifyGrade() {
         $('#eachClass #eachGpaScoreNum').each(function()
         {
             var gpa = parseFloat($(this).html());
             var score = parseFloat($(this).siblings('#eachGpaScoreNumTotal').html());
 
-            if(score == 0)
-                $(this).closest('tr').css('background-color', '#DDDDDD');
-            else if(gpa >= 4)
-                $(this).closest('tr').css('background-color', '#00FF00');
+            if(gpa >= 4)
+                $(this).closest('tr').css('background-color', '#B2E672');
             else if(gpa >= 3 && gpa < 4)
-                $(this).closest('tr').css('background-color', '#FFDD55');
+                $(this).closest('tr').css('background-color', '#FFFD88');
             else if(gpa >= 2 && gpa < 3)
-                $(this).closest('tr').css('background-color', '#FF8888');
-            else if(gpa >= 0 && gpa < 2) {
-                $(this).closest('tr').css('background-color', '#FF3333');
+                $(this).closest('tr').css('background-color', '#FFD478');
+            else if(gpa > 0 && gpa < 2) {
+                $(this).closest('tr').css('background-color', '#F96B85');
                 $(this).closest('tr').css('color', 'white');
             }
         });
+    }
+
+    function appendCss( css ) {
+      var head = document.head || document.getElementsByTagName('head')[0];
+      var style = document.createElement('style');
+
+      style.type = 'text/css';
+      if (style.styleSheet){
+        style.styleSheet.cssText = css;
+      } else {
+        style.appendChild(document.createTextNode(css));
+      }
+
+      head.appendChild(style);
     }
 })();
