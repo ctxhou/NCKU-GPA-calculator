@@ -110,7 +110,7 @@
             var calc0 = "<h3>已選擇學分數: <strong id='calc'>0</strong></h3>"
 
             var table = ""
-            var thead = "<tr><th></th><th>課程名稱</th><th>分數</th><th>GPA</th><th>學分</th><th>GPA*學分</th><th>等第</th><th>通識</th></tr>";
+            var thead = "<tr><th></th><th>課程名稱</th><th>必/選修</th><th>分數</th><th>GPA</th><th>學分</th><th>GPA*學分</th><th>等第</th><th>通識</th></tr>";
 
             for (var key in allClass){
                 var ttitle = "<h3>" + semesterNames[key] + "</h3>"
@@ -118,6 +118,7 @@
                 for(var detail in allClass[key]){
                     tbody = tbody + "<tr id='eachClass'><td><input type='checkbox' class='checkbox'></td>"
                                   + "<td>" + allClass[key][detail].className
+                                  + "</td><td align='right'>" + allClass[key][detail].required
                                   + "</td><td align='right'>" + allClass[key][detail].score
                                   + "</td><td align='right' id='eachGpaScoreNum' >" + allClass[key][detail].gpaScoreNum
                                   + "</td><td align='right'>" + allClass[key][detail].credit
@@ -184,6 +185,7 @@
             gpaScoreLetter = "F";
             var className = $(this).find('td:eq('+ 3 + ') b').html();
             var credit = $(this).find('td:eq('+ 5 + ') b').html(); //學分
+            var required = $(this).find('td:eq('+ 6 + ') b').html();//必選修
             var score = $(this).find('td:eq('+ 7 + ') b').html();  //分數
             var gen = $(this).find('td:eq('+ 9 + ') b').html();    //通識
             var origin = score;
@@ -227,7 +229,7 @@
                 }
             }
             if (className !== null && className !== undefined){
-                json.push({"className": className, "credit": credit, "score": score, "gpaScoreNum": gpaScoreNum, "gen": gen, "gpaScoreLetter": gpaScoreLetter});
+                json.push({"className": className, "credit": credit, "score": score, "gpaScoreNum": gpaScoreNum, "required": required, "gen": gen, "gpaScoreLetter": gpaScoreLetter});
             }
         })
         return [gpaScoreNumTotal, creditPart, json, coreGenPart, overGenPart];
