@@ -86,6 +86,16 @@
         }
     }
 
+    function initCalculator() {
+        $('.checkbox').change(function(){
+            var credit = parseInt($(this).parent().siblings().eq(3).text());
+            var c = this.checked ? 1 : -1;
+            var calc = $("#calc");
+            var currentCredit = parseInt(calc.text());
+            calc.text(currentCredit+credit*c);
+        });
+    }
+
     function showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGen, overGen){
         //if it is not firefox, print the full result
         if(!$.support.mozilla){
@@ -97,14 +107,17 @@
                          "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td>自然與工程科學</td><td>"+ overGen[2] +"</td></tr>" +
                          "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td>生命科學與健康</td><td>"+ overGen[3] +"</td></tr>";
 
+            var calc0 = "<h3>已選擇學分數: <strong id='calc'>0</strong></h3>"
+
             var table = ""
-            var thead = "<tr><th>課程名稱</th><th>分數</th><th>GPA</th><th>學分</th><th>GPA*學分</th><th>等第</th><th>通識</th></tr>";
+            var thead = "<tr><th></th><th>課程名稱</th><th>分數</th><th>GPA</th><th>學分</th><th>GPA*學分</th><th>等第</th><th>通識</th></tr>";
 
             for (var key in allClass){
                 var ttitle = "<h3>" + semesterNames[key] + "</h3>"
                 var tbody = ""
                 for(var detail in allClass[key]){
-                    tbody = tbody + "<tr id='eachClass'><td>" + allClass[key][detail].className
+                    tbody = tbody + "<tr id='eachClass'><td><input type='checkbox' class='checkbox'></td>"
+                                  + "<td>" + allClass[key][detail].className
                                   + "</td><td align='right'>" + allClass[key][detail].score
                                   + "</td><td align='right' id='eachGpaScoreNum' >" + allClass[key][detail].gpaScoreNum
                                   + "</td><td align='right'>" + allClass[key][detail].credit
@@ -125,10 +138,12 @@
                                 + thead0
                                 + tbody0
                                 + "</table>"
+                                + calc0
                                 + table + "</div>");
             $('#close').click(function(){
                 $('#my-score').remove();
             })
+            initCalculator();
         }else{
             alert("Your GPA: "+ gpaScoreNum);
         }
