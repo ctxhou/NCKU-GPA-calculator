@@ -25,7 +25,7 @@
             var gpaTotal = 0,
                 creditTotal = 0,
                 coreGenTotal = [0, 0, 0, 0],
-                crossGenTotal = [0, 0, 0, 0],
+                crossGenTotal = [0, 0, 0, 0, 0],
                 inDeptElectTotal = 0,
                 crossDeptElectTotal = 0;
 
@@ -45,6 +45,8 @@
                     allClass.push(scoreAndCredit[2]);
                     for (var i = 0; i < 4; i++) {
                         coreGenTotal[i] += scoreAndCredit[3][i];
+                    };
+                    for (var i = 0; i < 5; i++) {
                         crossGenTotal[i] += scoreAndCredit[4][i];
                     };
                     inDeptElectTotal += scoreAndCredit[5];
@@ -106,7 +108,8 @@
             var tbody0 = "<tr><td>基礎國文</td><td>"+ coreGen[0] +"</td><td>人文學</td><td>"+ crossGen[0] +"</td></tr>" +
                          "<tr><td>英文</td><td>"+ coreGen[1] +"</td><td>社會科學</td><td>"+ crossGen[1] +"</td></tr>" +
                          "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td>自然與工程科學</td><td>"+ crossGen[2] +"</td></tr>" +
-                         "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td>生命科學與健康</td><td>"+ crossGen[3] +"</td></tr>";
+                         "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td>生命科學與健康</td><td>"+ crossGen[3] +"</td></tr>"+
+                         "<tr><td>-</td><td>-</td><td>科際整合</td><td>"+ crossGen[4] +"</td></tr>";
 
             var calc0 = "<h3>已選擇學分數: <strong id='calc'>0</strong></h3>"
 
@@ -174,7 +177,7 @@
         var gpaScoreLetter = "X";
         var creditPart = 0;
         var coreGenPart = [0, 0, 0, 0];  //核心通識 [國文, 英文, 公民與歷史, 哲學與藝術]
-        var crossGenPart = [0, 0, 0, 0]; //跨領域 [人文學, 社會科學, 自然與工程科學, 生命科學與健康]
+        var crossGenPart = [0, 0, 0, 0, 0]; //跨領域 [人文學, 社會科學, 自然與工程科學, 生命科學與健康, 科際整合]
         var inDeptElectPart = 0;         //系上選修
         var crossDeptElectPart = 0;      //外系選修
         var json = [];
@@ -192,7 +195,7 @@
             var credit = $(this).find('td:eq('+ 5 + ') b').html();    //學分
             var required = $(this).find('td:eq('+ 6 + ') b').html();  //必選修
             var score = $(this).find('td:eq('+ 7 + ') b').html();     //分數
-            var gen = $(this).find('td:eq('+ maxCol + ') b').html();       //通識
+            var gen = $(this).find('td:eq('+ maxCol + ') b').html();  //通識
             var origin = score;
 
             score = parseInt(score) || $(this).find('td:eq('+ 7 + ') b').html(); //if the score is not appropriate, assign -1
@@ -221,6 +224,9 @@
                         break;
                     case "生命科學與健康":
                         crossGenPart[3] += credit;
+                        break;
+                    case "科際整合":
+                        crossGenPart[4] += credit;
                         break;
                     case "哲學與藝術":
                         coreGenPart[3] += credit;
