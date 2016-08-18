@@ -186,12 +186,13 @@
         $(html).find("table[bgcolor='#66CCFF'] tr:gt(1):not(:last)").each(function(){
             gpaScoreNumTotal, gpaScoreNum = 0;
             gpaScoreLetter = "F";
+            var maxCol = $(this).find('td').length - 1;
             var classNo = $(this).find('td:eq('+ 1 + ') b').html();   //課程代碼
             var className = $(this).find('td:eq('+ 3 + ') b').html(); //課程名稱
             var credit = $(this).find('td:eq('+ 5 + ') b').html();    //學分
             var required = $(this).find('td:eq('+ 6 + ') b').html();  //必選修
             var score = $(this).find('td:eq('+ 7 + ') b').html();     //分數
-            var gen = $(this).find('td:eq('+ 9 + ') b').html();       //通識
+            var gen = $(this).find('td:eq('+ maxCol + ') b').html();       //通識
             var origin = score;
 
             score = parseInt(score) || $(this).find('td:eq('+ 7 + ') b').html(); //if the score is not appropriate, assign -1
