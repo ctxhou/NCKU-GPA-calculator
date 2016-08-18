@@ -25,10 +25,13 @@
             var gpaTotal = 0,
                 creditTotal = 0,
                 coreGenTotal = [0, 0, 0, 0],
-                overGenTotal = [0, 0, 0, 0];
+                crossGenTotal = [0, 0, 0, 0, 0],
+                inDeptElectTotal = 0,
+                crossDeptElectTotal = 0;
 
             // get all the submit button name
             var semesterNames = getSemesterName();
+            var stdDeptNo = getStdDeptNo();
             var allClass = [];
             // loop all the submit button
             $.each(semesterNames, function(key, name){
@@ -36,18 +39,23 @@
                 //var html = getSemesterHtml(name);
                 getSemesterHtml(name, function(html){
                 //get each semester score and credit
-                    scoreAndCredit = analyzeSemesterGrade(html, semesterNames);
+                    scoreAndCredit = analyzeSemesterGrade(html, semesterNames, stdDeptNo);
                     gpaTotal = accAdd(gpaTotal, scoreAndCredit[0]);
                     creditTotal += scoreAndCredit[1];
                     allClass.push(scoreAndCredit[2]);
                     for (var i = 0; i < 4; i++) {
                         coreGenTotal[i] += scoreAndCredit[3][i];
-                        overGenTotal[i] += scoreAndCredit[4][i];
                     };
+                    for (var i = 0; i < 5; i++) {
+                        crossGenTotal[i] += scoreAndCredit[4][i];
+                    };
+                    inDeptElectTotal += scoreAndCredit[5];
+                    crossDeptElectTotal += scoreAndCredit[6];
                 });
             })
             var gpaScoreNum = (gpaTotal / creditTotal);
-            showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGenTotal, overGenTotal);
+            showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, 
+                       coreGenTotal, crossGenTotal, inDeptElectTotal, crossDeptElectTotal);
             appendCss("\
               #my-score {\
                 box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\
@@ -86,25 +94,35 @@
         }
     }
 
-    function showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGen, overGen){
+    function showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGen, crossGen, inElect, crossElect){
         //if it is not firefox, print the full result
         if(!$.support.mozilla){
+            var electCredit = inElect + crossElect;
+            var requiredCredit = creditTotal - electCredit;
+            var genCredit = coreGen.reduce((a, b) => a + b, 0) + crossGen.reduce((a, b) => a + b, 0);
+            var deptRequiredCredit = requiredCredit - genCredit;
+
             var header = "<h3>Your Avg. GPA: <strong>"+ gpaScoreNum + "</strong> </h3>";
 
             var thead0 = "<tr><th>核心通識</th></th><th>學分</th><th>跨領域通識</th><th>學分</th></tr>"
-            var tbody0 = "<tr><td>基礎國文</td><td>"+ coreGen[0] +"</td><td>人文學</td><td>"+ overGen[0] +"</td></tr>" +
-                         "<tr><td>英文</td><td>"+ coreGen[1] +"</td><td>社會科學</td><td>"+ overGen[1] +"</td></tr>" +
-                         "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td>自然與工程科學</td><td>"+ overGen[2] +"</td></tr>" +
-                         "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td>生命科學與健康</td><td>"+ overGen[3] +"</td></tr>";
+            var tbody0 = "<tr><td>基礎國文</td><td>"+ coreGen[0] +"</td><td>人文學</td><td>"+ crossGen[0] +"</td></tr>" +
+                         "<tr><td>英文</td><td>"+ coreGen[1] +"</td><td>社會科學</td><td>"+ crossGen[1] +"</td></tr>" +
+                         "<tr><td>公民與歷史</td><td>"+ coreGen[2] +"</td><td>自然與工程科學</td><td>"+ crossGen[2] +"</td></tr>" +
+                         "<tr><td>哲學與藝術</td><td>"+ coreGen[3] +"</td><td>生命科學與健康</td><td>"+ crossGen[3] +"</td></tr>"+
+                         "<tr><td>-</td><td>-</td><td>科際整合</td><td>"+ crossGen[4] +"</td></tr>";
+
+            var calc0 = "<h3>已選擇學分數: <strong id='calc'>0</strong></h3>"
 
             var table = ""
-            var thead = "<tr><th>課程名稱</th><th>分數</th><th>GPA</th><th>學分</th><th>GPA*學分</th><th>等第</th><th>通識</th></tr>";
+            var thead = "<tr><th></th><th>課程名稱</th><th>必/選修</th><th>分數</th><th>GPA</th><th>學分</th><th>GPA*學分</th><th>等第</th><th>通識</th></tr>";
 
             for (var key in allClass){
                 var ttitle = "<h3>" + semesterNames[key] + "</h3>"
                 var tbody = ""
                 for(var detail in allClass[key]){
-                    tbody = tbody + "<tr id='eachClass'><td>" + allClass[key][detail].className
+                    tbody = tbody + "<tr id='eachClass'><td><input type='checkbox' class='checkbox'></td>"
+                                  + "<td>" + allClass[key][detail].className
+                                  + "</td><td align='right'>" + allClass[key][detail].required
                                   + "</td><td align='right'>" + allClass[key][detail].score
                                   + "</td><td align='right' id='eachGpaScoreNum' >" + allClass[key][detail].gpaScoreNum
                                   + "</td><td align='right'>" + allClass[key][detail].credit
@@ -121,14 +139,18 @@
             $('body').append("<div id='my-score'><button id='close'>close</button>"
                                 + header
                                 + "<h4>Total GPA: " + gpaTotal + " / Total credit: " + creditTotal + "</h4>"
+                                + "<h4>必修 (系上/通識): " + requiredCredit + " (" + deptRequiredCredit + "/" + genCredit + ")</h4>"
+                                + "<h4>選修 (系上/外系): " + electCredit + " (" + inElect + "/" + crossElect + ")</h4>"
                                 + "<table class='myTable'>"
                                 + thead0
                                 + tbody0
                                 + "</table>"
+                                + calc0
                                 + table + "</div>");
             $('#close').click(function(){
                 $('#my-score').remove();
             })
+            initCalculator();
         }else{
             alert("Your GPA: "+ gpaScoreNum);
         }
@@ -149,15 +171,15 @@
         })
     }
 
-    function analyzeSemesterGrade(html, semesterNames){
+    function analyzeSemesterGrade(html, semesterNames, stdDeptNo){
         var gpaScoreNumTotal = 0;
         var gpaScoreNum = 0;
         var gpaScoreLetter = "X";
         var creditPart = 0;
-        //核心通識
-        var coreGenPart = [0, 0, 0, 0];
-        //跨領域
-        var overGenPart = [0, 0, 0, 0];
+        var coreGenPart = [0, 0, 0, 0];  //核心通識 [國文, 英文, 公民與歷史, 哲學與藝術]
+        var crossGenPart = [0, 0, 0, 0, 0]; //跨領域 [人文學, 社會科學, 自然與工程科學, 生命科學與健康, 科際整合]
+        var inDeptElectPart = 0;         //系上選修
+        var crossDeptElectPart = 0;      //外系選修
         var json = [];
 
         html = html.replace(/(\/body|\/html)/i, "\/div")
@@ -167,10 +189,13 @@
         $(html).find("table[bgcolor='#66CCFF'] tr:gt(1):not(:last)").each(function(){
             gpaScoreNumTotal, gpaScoreNum = 0;
             gpaScoreLetter = "F";
-            var className = $(this).find('td:eq('+ 3 + ') b').html();
-            var credit = $(this).find('td:eq('+ 5 + ') b').html(); //學分
-            var score = $(this).find('td:eq('+ 7 + ') b').html();  //分數
-            var gen = $(this).find('td:eq('+ 9 + ') b').html();    //通識
+            var maxCol = $(this).find('td').length - 1;
+            var classNo = $(this).find('td:eq('+ 1 + ') b').html();   //課程代碼
+            var className = $(this).find('td:eq('+ 3 + ') b').html(); //課程名稱
+            var credit = $(this).find('td:eq('+ 5 + ') b').html();    //學分
+            var required = $(this).find('td:eq('+ 6 + ') b').html();  //必選修
+            var score = $(this).find('td:eq('+ 7 + ') b').html();     //分數
+            var gen = $(this).find('td:eq('+ maxCol + ') b').html();  //通識
             var origin = score;
 
             score = parseInt(score) || $(this).find('td:eq('+ 7 + ') b').html(); //if the score is not appropriate, assign -1
@@ -185,18 +210,23 @@
                 gpaScoreNumTotal = accAdd(gpaScoreNumTotal, gpaScoreNum * 1000 * credit / 1000);
 
                 creditPart += credit;
+
+                //計算通識學分
                 switch(gen) {
                     case "人文學":
-                        overGenPart[0] += credit;
+                        crossGenPart[0] += credit;
                         break;
                     case "社會科學":
-                        overGenPart[1] += credit;
+                        crossGenPart[1] += credit;
                         break;
                     case "自然與工程科學":
-                        overGenPart[2] += credit;
+                        crossGenPart[2] += credit;
                         break;
                     case "生命科學與健康":
-                        overGenPart[3] += credit;
+                        crossGenPart[3] += credit;
+                        break;
+                    case "科際整合":
+                        crossGenPart[4] += credit;
                         break;
                     case "哲學與藝術":
                         coreGenPart[3] += credit;
@@ -210,12 +240,22 @@
                             coreGenPart[2] += credit;
                         break;
                 }
+
+                //計算選修學分
+                var deptNo = classNo.substr(0,2);
+                if( required.search("選") > -1 ) {
+                    if (score > 60) {
+                        if (deptNo == stdDeptNo) inDeptElectPart += credit;
+                        else crossDeptElectPart += credit;
+                    }
+                }
+
             }
             if (className !== null && className !== undefined){
-                json.push({"className": className, "credit": credit, "score": score, "gpaScoreNum": gpaScoreNum, "gen": gen, "gpaScoreLetter": gpaScoreLetter});
+                json.push({"deptNo": deptNo, "className": className, "credit": credit, "score": score, "gpaScoreNum": gpaScoreNum, "required": required, "gen": gen, "gpaScoreLetter": gpaScoreLetter});
             }
         })
-        return [gpaScoreNumTotal, creditPart, json, coreGenPart, overGenPart];
+        return [gpaScoreNumTotal, creditPart, json, coreGenPart, crossGenPart, inDeptElectPart, crossDeptElectPart];
     }
 
     function gpaLetter(score){
@@ -291,6 +331,12 @@
         return semesterNames;
     }
 
+    function getStdDeptNo() {
+        var stdID = $("font[color='#0000FF'] b").text().split(/\s+/)[3];
+        var deptNo = stdID.substr(0,2);
+        return deptNo;
+    }
+
     function accAdd(arg1, arg2){
         var r1, r2, m;
         try {
@@ -338,5 +384,15 @@
       }
 
       head.appendChild(style);
+    }
+
+    function initCalculator() {
+        $('.checkbox').change(function(){
+            var credit = parseInt($(this).parent().siblings().eq(4).text());
+            var c = this.checked ? 1 : -1;
+            var calc = $("#calc");
+            var currentCredit = parseInt(calc.text());
+            calc.text(currentCredit+credit*c);
+        });
     }
 })();
