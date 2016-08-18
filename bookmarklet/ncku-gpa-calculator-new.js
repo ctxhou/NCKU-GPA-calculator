@@ -25,7 +25,9 @@
             var gpaTotal = 0,
                 creditTotal = 0,
                 coreGenTotal = [0, 0, 0, 0],
-                crossGenTotal = [0, 0, 0, 0];
+                crossGenTotal = [0, 0, 0, 0],
+                inDeptElectTotal = 0,
+                crossDeptElectTotal = 0;
 
             // get all the submit button name
             var semesterNames = getSemesterName();
@@ -45,10 +47,13 @@
                         coreGenTotal[i] += scoreAndCredit[3][i];
                         crossGenTotal[i] += scoreAndCredit[4][i];
                     };
+                    inDeptElectTotal += scoreAndCredit[5];
+                    crossDeptElectTotal += scoreAndCredit[6];
                 });
             })
             var gpaScoreNum = (gpaTotal / creditTotal);
-            showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGenTotal, crossGenTotal);
+            showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, 
+                       coreGenTotal, crossGenTotal, inDeptElectTotal, crossDeptElectTotal);
             appendCss("\
               #my-score {\
                 box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);\
@@ -87,9 +92,14 @@
         }
     }
 
-    function showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGen, crossGen){
+    function showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, coreGen, crossGen, inElect, crossElect){
         //if it is not firefox, print the full result
         if(!$.support.mozilla){
+            var electCredit = inElect + crossElect;
+            var requiredCredit = creditTotal - electCredit;
+            var genCredit = coreGen.reduce((a, b) => a + b, 0) + crossGen.reduce((a, b) => a + b, 0);
+            var deptRequiredCredit = requiredCredit - genCredit;
+
             var header = "<h3>Your Avg. GPA: <strong>"+ gpaScoreNum + "</strong> </h3>";
 
             var thead0 = "<tr><th>核心通識</th></th><th>學分</th><th>跨領域通識</th><th>學分</th></tr>"
@@ -126,6 +136,8 @@
             $('body').append("<div id='my-score'><button id='close'>close</button>"
                                 + header
                                 + "<h4>Total GPA: " + gpaTotal + " / Total credit: " + creditTotal + "</h4>"
+                                + "<h4>必修 (系上/通識): " + requiredCredit + " (" + deptRequiredCredit + "/" + genCredit + ")</h4>"
+                                + "<h4>選修 (系上/外系): " + electCredit + " (" + inElect + "/" + crossElect + ")</h4>"
                                 + "<table class='myTable'>"
                                 + thead0
                                 + tbody0
