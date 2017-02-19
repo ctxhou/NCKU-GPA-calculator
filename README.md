@@ -13,11 +13,14 @@
 在Firefox顯示歷年修課列表會有編碼的問題，因此在Firefox僅顯示GPA。
 
 ## Special thanks
-[@imgarylai](http://github.com/imgarylai)
 
-[@team6612](http://github.com/team6612)
+[@imgarylai](github.com/imgarylai)
 
-[@xxhomey19](http://github.com/xxhomey19)
+[@team6612](github.com/team6612)
+
+[@xxhomey19](github.com/xxhomey19)
+
+[@xr2439](github.com/xr2439)
 
 ## License
 MIT [@ctxhou](http://github.com/ctxhou)
