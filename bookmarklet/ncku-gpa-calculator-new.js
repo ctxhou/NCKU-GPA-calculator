@@ -165,7 +165,7 @@
             processData : false,
             type: "POST",
             success: function(web){
-              if (web.length == 718) return getSemesterHtml(name, callback);
+              if (web.length <= 1000) return getSemesterHtml(name, callback);
               else return callback(web);
             }
         })
