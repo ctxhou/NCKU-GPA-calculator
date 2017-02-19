@@ -14,13 +14,13 @@
 
 ## Special thanks
 
-[@imgarylai](github.com/imgarylai)
+[@imgarylai](https://github.com/imgarylai)
 
-[@team6612](github.com/team6612)
+[@team6612](https://github.com/team6612)
 
-[@xxhomey19](github.com/xxhomey19)
+[@xxhomey19](https://github.com/xxhomey19)
 
-[@xr2439](github.com/xr2439)
+[@xr2439](https://github.com/xr2439)
 
 ## License
 MIT [@ctxhou](http://github.com/ctxhou)
