@@ -2,7 +2,7 @@
 (function() {
     // the minimum version of jQuery we want
     var v = "1.12.0";
-
+    
     // check prior inclusion and version
     if (window.jQuery === undefined || window.jQuery.fn.jquery < v) {
         var done = false;
@@ -21,7 +21,14 @@
 
     function initGPABookmarklet() {
         // if domain is not ncku grade, redirect to homepage.
-        if (document.domain == "qrys.sso2.ncku.edu.tw" || "140.116.165.71:8888" || "140.116.165.72:8888" || "140.116.165.73:8888") {
+        // get the current domain
+        var d = document.domain;
+        // add the new URL
+        if (d === "qrys.ncku.edu.tw" || 
+            d === "qrys.sso2.ncku.edu.tw" || 
+            d === "140.116.165.71" || 
+            d === "140.116.165.72" || 
+            d === "140.116.165.73") {
             var gpaTotal = 0,
                 creditTotal = 0,
                 coreGenTotal = [0, 0, 0, 0],
@@ -33,6 +40,11 @@
             var semesterNames = getSemesterName();
             var stdDeptNo = getStdDeptNo();
             var allClass = [];
+            // error check - if there's no semester button
+            if (semesterNames.length === 0) {
+                    alert("錯誤：找不到學期資料。\n請確認您是否位於「成績查詢」頁面，且頁面上方有學期按鈕。");
+                    return;
+                }
             // loop all the submit button
             $.each(semesterNames, function(key, name){
                 var scoreAndCredit = [];
@@ -53,6 +65,10 @@
                     crossDeptElectTotal += scoreAndCredit[6];
                 });
             })
+            // error check - if all the credit sum up to zero
+            if (creditTotal === 0) {
+                alert("警告：計算結果為 0 學分。\n這可能是因為網頁改版導致無法抓取成績表格，建議回報給開發者。");
+            }
             var gpaScoreNum = (gpaTotal / creditTotal);
             showResult(gpaScoreNum, gpaTotal, creditTotal, allClass, semesterNames, 
                        coreGenTotal, crossGenTotal, inDeptElectTotal, crossDeptElectTotal);
@@ -91,6 +107,8 @@
             classifyGrade();
         } else {
             window.location.href = "http://ncku-gpa.ctxhou.com/";
+            // error message
+            alert("網域錯誤：本工具只能在成大成績查詢系統 (qrys.ncku.edu.tw) 使用。\n目前網域: " + d);
         }
     }
 
